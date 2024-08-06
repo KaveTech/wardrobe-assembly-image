@@ -1,39 +1,5 @@
-import json
-import os
 import drawsvg as draw
 
-file_name = "webhook.json"
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-file_path = os.path.join(BASE_DIR, file_name)
-
-with open(file_path, "r") as file:
-    data = json.load(file)
-    print(len(data['order']['lines']))
-
-wardrobe_json = {}
-
-for i in range(len(data['order']['lines'])):
-    if data['order']['lines'][i]['product_classification'] == 'wardrobe_body_extension' or data['order']['lines'][i]['product_classification'] == 'wardrobe_body_base':
-        design_module_index = data['order']['lines'][i]['customisation_details']['design_module_index'] - 1
-        wardrobe_json[design_module_index] = {
-            "width": data['order']['lines'][i]['customisation_details']['width'],
-            "height": data['order']['lines'][i]['customisation_details']['height'],
-        }
-
-print(wardrobe_json)
-
-components_json = {}
-
-for i in range(len(data['order']['lines'])):
-    if data['order']['lines'][i]['product_classification'] == 'wardrobe_shelf':
-        design_module_index = data['order']['lines'][i]['customisation_details']['design_module_index'] - 1
-        components_json[design_module_index] = {
-            "body": design_module_index,
-            "component": "shelf",
-            "height": data['order']['lines'][i]['customisation_details']['assembly_position_Y'],
-        }
-
-print(components_json)
 
 # Define arrow function
 def arrow(x, y, lenght, direction, text=None, both_ends=True):
@@ -45,7 +11,15 @@ def arrow(x, y, lenght, direction, text=None, both_ends=True):
     arrow = draw.Group()
     arrow.append(draw.Line(x, y, x - lenght, y, stroke_width=3))
     arrow.append(
-        draw.Lines(x - lenght, y, x - lenght + 15, y - 15, x - lenght + 15, y + 15, stroke_width=3)
+        draw.Lines(
+            x - lenght,
+            y,
+            x - lenght + 15,
+            y - 15,
+            x - lenght + 15,
+            y + 15,
+            stroke_width=3,
+        )
     )
     if both_ends:
         arrow.append(draw.Lines(x, y, x - 15, y - 15, x - 15, y + 15, stroke_width=3))
@@ -65,22 +39,7 @@ def arrow(x, y, lenght, direction, text=None, both_ends=True):
     )
 
 
-""" wardrobe_json = {
-    0: {"width": 100, "height": 200},
-    1: {"width": 100, "height": 200},
-    2: {"width": 100, "height": 200},
-    3: {"width": 100, "height": 200},
-}
-
-components_json = {
-    0: {"body": 0, "component": "shelf", "height": 130},
-    1: {"body": 0, "component": "shelf", "height": 150},
-    2: {"body": 1, "component": "shelf", "height": 130},
-    3: {"body": 2, "component": "shelf", "height": 130},
-} """
-
-
-""" wardrobe_json = {
+wardrobe_json = {
     0: {"width": 700, "height": 2000},
     1: {"width": 600, "height": 2000},
     2: {"width": 1400, "height": 2000},
@@ -96,7 +55,7 @@ components_json = {
     4: {"body": 2, "component": "shelf", "height": 600},
     5: {"body": 3, "component": "shelf", "height": 1600},
     6: {"body": 4, "component": "shelf", "height": 1600},
-} """
+}
 
 
 def get_wardrobe_width(wardrobe):
@@ -208,7 +167,14 @@ class ComponentConstructor:
             fill="gray",
         )
         d.append(shelf)
-        arrow(position + width / 2, component_height_canvas + 250, 200, "up", component_height, False)
+        arrow(
+            position + width / 2,
+            component_height_canvas + 250,
+            200,
+            "up",
+            component_height,
+            False,
+        )
 
     def draw_component(self, d, component):
         component_type = self.components[component]["component"]
