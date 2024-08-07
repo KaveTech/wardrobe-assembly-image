@@ -1,28 +1,29 @@
+import os
+import json
+
 from svg import Canvas
 from assembly_image import Wardrobe
 from assembly_image import WardrobeConstructor
 from assembly_image import Components
 from assembly_image import ComponentConstructor
 
+from translator import get_wardrobe
+from translator import get_components
 
-wardrobe_json = {
-    0: {"width": 700, "height": 2000},
-    1: {"width": 600, "height": 2000},
-    2: {"width": 1400, "height": 2000},
-    3: {"width": 500, "height": 2000},
-    4: {"width": 500, "height": 2000},
-}
+modular_design_code = input("Enter the modular design code: ")
+if "MD-" not in modular_design_code:
+    modular_design_code = f"MD-{modular_design_code}"
 
-components_json = {
-    0: {"body": 0, "component": "shelf", "height": 800},
-    1: {"body": 0, "component": "shelf", "height": 1200},
-    2: {"body": 1, "component": "shelf", "height": 1300},
-    3: {"body": 2, "component": "shelf", "height": 400},
-    4: {"body": 2, "component": "shelf", "height": 600},
-    5: {"body": 3, "component": "shelf", "height": 1600},
-    6: {"body": 4, "component": "shelf", "height": 1600},
-}
+file_name = f"{modular_design_code}.json"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(BASE_DIR, file_name)
 
+with open(file_path, "r") as file:
+    data = json.load(file)
+
+
+wardrobe_json = get_wardrobe(data)
+components_json = get_components(data)
 
 wardrobe = Wardrobe(wardrobe_json)
 canvas = Canvas(wardrobe.width, wardrobe.height)
@@ -37,4 +38,4 @@ wardrobe_constructor.draw_all_bodies_dimensions()
 components_constructor.draw_all_components()
 components_constructor.draw_all_components_dimensions()
 
-canvas.save("MD-000001")
+canvas.save(modular_design_code)
