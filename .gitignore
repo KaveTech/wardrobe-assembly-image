@@ -1,4 +1,6 @@
-example.png
-example.svg
+*.png
+*.svg
 .env
+.venv
+.venv/
 __pycache__
