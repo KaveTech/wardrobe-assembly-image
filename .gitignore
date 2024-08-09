@@ -1,5 +1,6 @@
 *.png
 *.svg
+MD-*.*
 .env
 .venv
 .venv/
