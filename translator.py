@@ -20,7 +20,7 @@ def get_components(data):
     components_json = {}
 
     for index, i in enumerate(data):
-        if data[i]["product_classification"] == "wardrobe_shelf":
+        if data[i]["product_classification"] == "WARDROBE_SHELF_REGULAR":
             design_module_index = (
                 data[i]["customisation_details"]["design_module_index"] - 1
             )
@@ -29,7 +29,7 @@ def get_components(data):
                 "component": "shelf",
                 "height": data[i]["customisation_details"]["assembly_position_Y"],
             }
-        if data[i]["product_classification"] == "wardrobe_drawer":
+        if data[i]["product_classification"] == "WARDROBE_DRAWER_SINGLE":
             design_module_index = (
                 data[i]["customisation_details"]["design_module_index"] - 1
             )
